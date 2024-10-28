@@ -15,7 +15,7 @@
 #include <QHeaderView>
 #include <QFileInfo>
 
-// Кастомный класс для фильтрации строк, включая вложенные папки
+// Класс для фильтрации строк
 class FileFilterProxyModel : public QSortFilterProxyModel {
 public:
     explicit FileFilterProxyModel(QObject *parent = nullptr) : QSortFilterProxyModel(parent) {}
@@ -40,7 +40,7 @@ private:
     }
 };
 
-// Кастомная модель для вычисления размера содержимого папок
+// Модель для вычисления размера папок
 class CustomFileSystemModel : public QFileSystemModel {
 public:
     explicit CustomFileSystemModel(QObject *parent = nullptr) : QFileSystemModel(parent) {}
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     if (parser.isSet(dontWatchOption))
         model.setOption(QFileSystemModel::DontWatchForChanges);
 
-    // Настраиваем прокси-модель для фильтрации
+
     FileFilterProxyModel filterModel;
     filterModel.setSourceModel(&model);
     filterModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -154,11 +154,9 @@ int main(int argc, char *argv[])
     tree.header()->setSectionResizeMode(QHeaderView::Interactive);
     tree.setColumnWidth(1, 100);
 
-    // Поддержка сенсорной прокрутки
     QScroller::grabGesture(&tree, QScroller::TouchGesture);
     tree.setWindowTitle(QObject::tr("Dir View"));
-
-    // Создаем QLineEdit для ввода фильтра
+    
     QLineEdit filterInput;
     filterInput.setPlaceholderText(QObject::tr("Enter file or folder name to filter"));
 
